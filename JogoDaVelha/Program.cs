@@ -1,4 +1,6 @@
-﻿string[,] board = { { "-", "-", "-" }, { "-", "-", "-" }, { "-", "-", "-" } };
+﻿using System;
+
+string[,] board = { { "-", "-", "-" }, { "-", "-", "-" }, { "-", "-", "-" } };
 int rowLenght = board.GetLength(0), colLenght = board.GetLength(1);
 int[] boardPosition = new int[2];
 
@@ -6,7 +8,7 @@ void PrintBoard()
 {
     for (int row = 0; row < rowLenght; row++)
     {
-        Console.Write($" {row +1} ");
+        Console.Write($" {row + 1} ");
         Console.Write("  ");
         for (int col = 0; col < colLenght; col++)
         {
@@ -41,14 +43,39 @@ int[] ChoosePosition()
     Console.WriteLine("");
 
     Console.WriteLine("Digite a linha no tabuleiro: ");
-    positionVector[0] = int.Parse(Console.ReadLine())-1;
+
+    if (!int.TryParse(Console.ReadLine(), out positionVector[0]))
+    {
+        Console.WriteLine("Informe um número válido");
+        return ChoosePosition();
+    }
+    else
+    {
+        positionVector[0] -= 1;
+    }
 
     Console.WriteLine("Digite a coluna no tabuleiro: ");
-    positionVector[1] = int.Parse(Console.ReadLine())-1;
+    if (!int.TryParse(Console.ReadLine(), out positionVector[1]))
+    {
+        Console.WriteLine("Informe um número válido");
+        Console.WriteLine("Aperte qualquer tecla para continuar");
+        Console.ReadKey();
+        Console.Clear();
+        PrintBoard();
+        return ChoosePosition();
+    }
+    else
+    {
+        positionVector[1] -= 1;
+    }
 
-    if (((positionVector[0] > 2) || (positionVector[0] < 0)) || ((positionVector[1] > 2)|| positionVector[1] < 0))
+    if (((positionVector[0] > 2) || (positionVector[0] < 0)) || ((positionVector[1] > 2) || positionVector[1] < 0))
     {
         Console.WriteLine("Digite uma posição válida");
+        Console.WriteLine("Aperte qualquer tecla para continuar");
+        Console.ReadKey();
+        Console.Clear();
+        PrintBoard();
         return ChoosePosition();
     }
 
@@ -58,12 +85,12 @@ int[] ChoosePosition()
     }
 
     Console.Clear();
-    
+
     PrintBoard();
-    
+
     Console.WriteLine();
     Console.WriteLine("Digite uma coordenada vazia");
-    
+
     return ChoosePosition();
 }
 
@@ -161,13 +188,12 @@ void GameStart()
         {
             if (IsWinner(board))
             {
-               
+                PrintBoard();
                 Console.WriteLine($"O {player} venceu!!!");
                 Console.WriteLine("Aperte qualquer tecla");
                 Console.ReadKey();
                 Console.Clear();
                 Console.WriteLine("    ___    ___     ___     ___     ___     ___    _  _     ___   \r\n   | _ \\  /   \\   | _ \\   /   \\   | _ )   | __|  | \\| |   / __|  \r\n   |  _/  | - |   |   /   | - |   | _ \\   | _|   | .` |   \\__ \\  \r\n  _|_|_   |_|_|   |_|_\\   |_|_|   |___/   |___|  |_|\\_|   |___/  \r\n_| \"\"\" |_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"|_|\"\"\"\"\"| \r\n\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-'\"`-0-0-' ");
-                game = false;
                 break;
             }
         }
